@@ -3,12 +3,13 @@
 #include <conio.h>
 #include <unistd.h>
 #include <time.h>
-#define PI 3.14
+#define PI 3.1
 int random();
 // int next_shape();
 void print_playground(char print_playground[20][20], int score[1]);
 int shapes(char playground[20][20], int t, int c, int score[1]);
 void clear(char playground[20][20], int score[1]);
+int gameover(char playground[20][20]);
 
 int main()
 {
@@ -20,10 +21,16 @@ int main()
         for (j = 0; j < 20; j++)
             playground[i][j] = ' ';
     }
+    
     while (1)
     {
         int s = shapes(playground, 0, 10, score);
         clear(playground, score);
+        if (gameover(playground))
+        {
+            printf("\nGAME OVER!!");
+            break;
+        }
         if (s == 27)
             break;
     }
@@ -79,7 +86,8 @@ int random()
 // }
 int shapes(char playground[20][20], int t, int c, int score[1])
 {
-    switch (random())
+    int rand = random();
+    switch (rand)
     {
     case 0:
     {
@@ -120,7 +128,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
             if (t == 19)
                 break;
 
-            if (playground[t + 1][8 + f] != ' ' || playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ')
+            if (playground[t + 1][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
             {
                 break;
             }
@@ -176,7 +184,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
             if (t == 19)
                 break;
 
-            if (playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ')
+            if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
             {
                 break;
             }
@@ -231,8 +239,8 @@ int shapes(char playground[20][20], int t, int c, int score[1])
             if (t == 19)
                 break;
 
-            if (playground[t + 1][6 + f] != ' ' || playground[t + 1][8 + f] != ' ' ||
-                playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ')
+            if (playground[t + 1][c - 4 + f] != ' ' || playground[t + 1][c - 2 + f] != ' ' ||
+                playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
             {
                 break;
             }
@@ -283,7 +291,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
             print_playground(playground, score);
             if (t == 19)
                 break;
-            if (playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ' || playground[t][8 + f] != ' ')
+            if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ' || playground[t][c - 2 + f] != ' ')
             {
                 break;
             }
@@ -330,3 +338,22 @@ void clear(char playground[20][20], int score[1])
         }
     }
 }
+
+int gameover(char playground[20][20])
+{
+    for (int c = 0; c < 20; c += 2)
+    {
+        int count = 0;
+        for (int t = 0; t < 20; t++)
+        {
+            if (playground[t][c] == '[')
+            {
+                count++;
+            }
+            if (count == 20)
+                return 1;
+        }
+    }
+    return 0;
+}
+
