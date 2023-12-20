@@ -256,7 +256,7 @@ int shapes(char playground[20][20], int t, int c)
             print_playground(playground);
             if (t == 19)
                 break;
-            if (playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ')
+            if (playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ' || playground[t][8 + f] != ' ')
             {
                 break;
             }
