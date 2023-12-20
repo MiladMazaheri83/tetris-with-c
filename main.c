@@ -5,14 +5,16 @@
 #include <time.h>
 #define PI 3.14
 int random();
-int shapes(char playground[20][20], int t, int c);
-void print_playground(char print_playground[20][20]);
-int clear(char playground[20][20]);
+// int next_shape();
+void print_playground(char print_playground[20][20], int score[1]);
+int shapes(char playground[20][20], int t, int c, int score[1]);
+void clear(char playground[20][20], int score[1]);
 
 int main()
 {
     char playground[20][20];
     int i, j;
+    int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
     {
         for (j = 0; j < 20; j++)
@@ -20,15 +22,16 @@ int main()
     }
     while (1)
     {
-        int s = shapes(playground, 0, 10);
-        clear(playground);
+        int s = shapes(playground, 0, 10, score);
+        clear(playground, score);
         if (s == 27)
             break;
     }
 }
 
-void print_playground(char playground[20][20])
+void print_playground(char playground[20][20], int score[1])
 {
+    int s = score[1];
     int i, j;
     printf("\t\t||||||||||||||||||||||||||\n");
     printf("\t\t--------------------------\n");
@@ -43,6 +46,7 @@ void print_playground(char playground[20][20])
     }
     printf("\t\t--------------------------\n");
     printf("\t\t++++++++++++++++++++++++++\n");
+    printf("\n\t\tscore: %d ", s);
 }
 
 int random()
@@ -50,7 +54,30 @@ int random()
     srand(clock() + time(NULL) + PI);
     return rand() % 4;
 }
-int shapes(char playground[20][20], int t, int c)
+// int next_shape()
+// {
+//     int next = random();
+//     switch (next)
+//     {
+//     case 0:
+//     {
+//         break;
+//     }
+//     case 1:
+//     {
+//         break;
+//     }
+//     case 2:
+//     {
+//         break;
+//     }
+//     case 3:
+//     {
+//         break;
+//     }
+//     }
+// }
+int shapes(char playground[20][20], int t, int c, int score[1])
 {
     switch (random())
     {
@@ -88,7 +115,7 @@ int shapes(char playground[20][20], int t, int c)
                 }
             }
             system("cls");
-            print_playground(playground);
+            print_playground(playground, score);
 
             if (t == 19)
                 break;
@@ -145,7 +172,7 @@ int shapes(char playground[20][20], int t, int c)
                 }
             }
             system("cls");
-            print_playground(playground);
+            print_playground(playground, score);
             if (t == 19)
                 break;
 
@@ -200,7 +227,7 @@ int shapes(char playground[20][20], int t, int c)
                 playground[t][shape[i] + 1 + f] = ']';
             }
             system("cls");
-            print_playground(playground);
+            print_playground(playground, score);
             if (t == 19)
                 break;
 
@@ -253,7 +280,7 @@ int shapes(char playground[20][20], int t, int c)
                 }
             }
             system("cls");
-            print_playground(playground);
+            print_playground(playground, score);
             if (t == 19)
                 break;
             if (playground[t + 1][10 + f] != ' ' || playground[t + 1][12 + f] != ' ' || playground[t][8 + f] != ' ')
@@ -277,7 +304,7 @@ int shapes(char playground[20][20], int t, int c)
     }
 }
 
-int clear(char playground[20][20])
+void clear(char playground[20][20], int score[1])
 {
     for (int t = 0; t < 20; t++)
     {
@@ -290,6 +317,7 @@ int clear(char playground[20][20])
         int h = t;
         if (count == 10)
         {
+            score[1] += 10;
             for (t; t > 0; t--)
             {
                 for (int c = 0; c < 20; c++)
