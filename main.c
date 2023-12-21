@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-#include <unistd.h>
+#include <windows.h>
 #include <time.h>
 #define PI 3.1
-int random();
-// int next_shape();
-void print_playground(char print_playground[20][20], int score[1]);
-int shapes(char playground[20][20], int t, int c, int score[1]);
+int random1();
+int random2();
+void next_shape(int *nextshape, char newshape[2][8]);
+void print_playground(char print_playground[20][20], int score[1], char newshape[2][8]);
+int shapes(char playground[20][20], int t, int c, int score[1], int *current_shape, char newshape[2][8]);
 void clear(char playground[20][20], int score[1]);
 int gameover(char playground[20][20]);
 
 int main()
 {
     char playground[20][20];
+    char newshape[2][8];
     int i, j;
     int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
@@ -21,10 +23,19 @@ int main()
         for (j = 0; j < 20; j++)
             playground[i][j] = ' ';
     }
-    
+
+    for (i = 0; i < 2; i++)
+    {
+        for (j = 0; j < 8; j++)
+            newshape[i][j] = ' ';
+    }
+
+    int current_shape = random1();
     while (1)
     {
-        int s = shapes(playground, 0, 10, score);
+        int nextshape = random2();
+        next_shape(&nextshape, newshape);
+        int s = shapes(playground, 0, 10, score, &current_shape, newshape);
         clear(playground, score);
         if (gameover(playground))
         {
@@ -32,15 +43,34 @@ int main()
             break;
         }
         if (s == 27)
+        {
             break;
+        }
+        current_shape = nextshape;
+        for (i = 0; i < 2; i++)
+        {
+            for (j = 0; j < 8; j++)
+                newshape[i][j] = ' ';
+        }
     }
 }
 
-void print_playground(char playground[20][20], int score[1])
+void print_playground(char playground[20][20], int score[1], char newshape[2][8])
 {
     int s = score[1];
     int i, j;
-    printf("\t\t||||||||||||||||||||||||||\n");
+    for (i = 0; i < 2; i++)
+    {
+        printf("\t\t");
+        for (j = 0; j < 8; j++)
+        {
+            printf("%c", newshape[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+    printf("\t\t||||||||||||||||||||||||||\tnext shape:\n");
     printf("\t\t--------------------------\n");
     for (i = 0; i < 20; i++)
     {
@@ -53,41 +83,87 @@ void print_playground(char playground[20][20], int score[1])
     }
     printf("\t\t--------------------------\n");
     printf("\t\t++++++++++++++++++++++++++\n");
-    printf("\n\t\tscore: %d ", s);
+    printf("\n\t\tscore: %d  press Esc to exit :)\n\n press button:\n", s);
 }
 
-int random()
+int random1()
 {
     srand(clock() + time(NULL) + PI);
     return rand() % 4;
 }
-// int next_shape()
-// {
-//     int next = random();
-//     switch (next)
-//     {
-//     case 0:
-//     {
-//         break;
-//     }
-//     case 1:
-//     {
-//         break;
-//     }
-//     case 2:
-//     {
-//         break;
-//     }
-//     case 3:
-//     {
-//         break;
-//     }
-//     }
-// }
-int shapes(char playground[20][20], int t, int c, int score[1])
+
+int random2()
 {
-    int rand = random();
-    switch (rand)
+    srand(clock() + time(NULL) + PI);
+    return rand() % 4;
+}
+
+void next_shape(int *nextshape, char newshape[2][8])
+{
+    switch (*nextshape)
+    {
+    case 0:
+    {
+        int t = 0;
+        int temp[8] = {4,5,2,3,4,5,6,7};
+        for (int i = 0; i < 8; i += 2)
+        {
+            newshape[t][temp[i]] = '[';
+            newshape[t][temp[i] + 1] = ']';
+            if (i == 0)
+            {
+                t++;
+            }
+        }
+        break;
+    }
+    case 1:
+    {
+        int t = 0;
+        int temp[8] = {2,3,4,5,2,3,4,5};
+        for (int i = 0; i < 8; i += 2)
+        {
+            newshape[t][temp[i]] = '[';
+            newshape[t][temp[i] + 1] = ']';
+            if (i == 2)
+            {
+                t++;
+            }
+        }
+        break;
+    }
+    case 2:
+    {
+        int t = 0;
+        int temp[8] = {1,2,3,4,5,6,7,8};
+        for (int i = 0; i < 8; i += 2)
+        {
+            newshape[t][temp[i]] = '[';
+            newshape[t][temp[i] + 1] = ']';
+        }
+        break;
+    }
+    case 3:
+    {
+        int t = 0;
+        int temp[8] = {1,2,3,4,3,4,5,6};
+        for (int i = 0; i < 8; i += 2)
+        {
+            newshape[t][temp[i]] = '[';
+            newshape[t][temp[i] + 1] = ']';
+            if (i == 2)
+            {
+                t++;
+            }
+        }
+        break;
+    }
+    }
+}
+
+int shapes(char playground[20][20], int t, int c, int score[1], int *current_shape, char newshape[2][8])
+{
+    switch (*current_shape)
     {
     case 0:
     {
@@ -123,7 +199,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
                 }
             }
             system("cls");
-            print_playground(playground, score);
+            print_playground(playground, score, newshape);
 
             if (t == 19)
                 break;
@@ -180,7 +256,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
                 }
             }
             system("cls");
-            print_playground(playground, score);
+            print_playground(playground, score, newshape);
             if (t == 19)
                 break;
 
@@ -235,7 +311,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
                 playground[t][shape[i] + 1 + f] = ']';
             }
             system("cls");
-            print_playground(playground, score);
+            print_playground(playground, score, newshape);
             if (t == 19)
                 break;
 
@@ -288,7 +364,7 @@ int shapes(char playground[20][20], int t, int c, int score[1])
                 }
             }
             system("cls");
-            print_playground(playground, score);
+            print_playground(playground, score, newshape);
             if (t == 19)
                 break;
             if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ' || playground[t][c - 2 + f] != ' ')
@@ -341,19 +417,11 @@ void clear(char playground[20][20], int score[1])
 
 int gameover(char playground[20][20])
 {
-    for (int c = 0; c < 20; c += 2)
+    if (playground[0][0] != ' ' || playground[0][2] != ' ' ||
+        playground[0][4] != ' ' || playground[0][6] != ' ' || playground[0][8] != ' ' || playground[0][10] != ' ' ||
+        playground[0][12] != ' ' || playground[0][14] != ' ' || playground[0][16] != ' ' || playground[0][18] != ' ')
     {
-        int count = 0;
-        for (int t = 0; t < 20; t++)
-        {
-            if (playground[t][c] == '[')
-            {
-                count++;
-            }
-            if (count == 20)
-                return 1;
-        }
+        return 1;
     }
     return 0;
 }
-
