@@ -6,18 +6,21 @@
 #define PI 3.1
 #define WIDTH 20
 #define HEIGHT 20
+#define ROW 2
+#define COL 8
+#define LOC 8
 int random1();
 int random2();
-void next_shape(int *nextshape, char newshape[2][8]);
-void print_playground(char print_playground[WIDTH][HEIGHT], int score[1], char newshape[2][8]);
-int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[2][8]);
+void next_shape(int *nextshape, char newshape[ROW][COL]);
+void print_playground(char print_playground[WIDTH][HEIGHT], int score[1], char newshape[ROW][COL]);
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[ROW][COL]);
 void clear(char playground[WIDTH][HEIGHT], int score[1]);
 int gameover(char playground[WIDTH][HEIGHT]);
 
 int main()
 {
     char playground[WIDTH][HEIGHT];
-    char newshape[2][8];
+    char newshape[ROW][COL];
     int i, j;
     int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
@@ -58,7 +61,7 @@ int main()
     scanf("%d");
 }
 
-void print_playground(char playground[WIDTH][HEIGHT], int score[1], char newshape[2][8])
+void print_playground(char playground[WIDTH][HEIGHT], int score[1], char newshape[ROW][COL])
 {
     int s = score[1];
     int i, j;
@@ -101,14 +104,14 @@ int random2()
     return rand() % 4;
 }
 
-void next_shape(int *nextshape, char newshape[2][8])
+void next_shape(int *nextshape, char newshape[ROW][COL])
 {
     switch (*nextshape)
     {
     case 0:
     {
         int t = 0;
-        int temp[8] = {4, 5, 2, 3, 4, 5, 6, 7};
+        int temp[LOC] = {4, 5, 2, 3, 4, 5, 6, 7};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -123,7 +126,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 1:
     {
         int t = 0;
-        int temp[8] = {2, 3, 4, 5, 2, 3, 4, 5};
+        int temp[LOC] = {2, 3, 4, 5, 2, 3, 4, 5};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -138,7 +141,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 2:
     {
         int t = 0;
-        int temp[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+        int temp[LOC] = {1, 2, 3, 4, 5, 6, 7, 8};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -149,7 +152,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 3:
     {
         int t = 0;
-        int temp[8] = {1, 2, 3, 4, 3, 4, 5, 6};
+        int temp[LOC] = {1, 2, 3, 4, 3, 4, 5, 6};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -164,14 +167,14 @@ void next_shape(int *nextshape, char newshape[2][8])
     }
 }
 
-int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[2][8])
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[ROW][COL])
 {
     switch (*current_shape)
     {
     case 0:
     {
         int sit = 1;
-        int shape[8] = {c, c + 1, c - 2, c - 1, c, c + 1, c + 2, c + 3};
+        int shape[LOC] = {c, c + 1, c - 2, c - 1, c, c + 1, c + 2, c + 3};
         int f = 0;
         for (t; t < 20; t)
         {
@@ -234,7 +237,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
             if (sit == 2)
             {
                 t -= 2;
-                int shape[8] = {c, c + 1, c, c + 1, c + 2, c + 3, c, c + 1};
+                int shape[LOC] = {c, c + 1, c, c + 1, c + 2, c + 3, c, c + 1};
                 if (_kbhit())
                 {
                     char ch = _getch();
@@ -292,7 +295,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
 
             if (sit == 3)
             {
-                int shape[8] = {c - 2, c - 1, c, c + 1, c + 2, c + 3, c, c + 1};
+                int shape[LOC] = {c - 2, c - 1, c, c + 1, c + 2, c + 3, c, c + 1};
                 t--;
                 if (_kbhit())
                 {
@@ -349,7 +352,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
 
             if (sit == 4)
             {
-                int shape[8] = {c, c + 1, c - 2, c - 1, c, c + 1, c, c + 1};
+                int shape[LOC] = {c, c + 1, c - 2, c - 1, c, c + 1, c, c + 1};
                 t-=2;
                 if (_kbhit())
                 {
@@ -411,7 +414,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
     case 1:
     {
         int f = 0;
-        int shape[8] = {c, c + 1, c + 2, c + 3, c, c + 1, c + 2, c + 3};
+        int shape[LOC] = {c, c + 1, c + 2, c + 3, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t)
         {
             t--;
@@ -469,7 +472,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
     {
         int sit = 1;
         int f = 0;
-        int shape[8] = {c - 4, c - 3, c - 2, c - 1, c, c + 1, c + 2, c + 3};
+        int shape[LOC] = {c - 4, c - 3, c - 2, c - 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t++)
         {
             if (sit == 1)
@@ -524,7 +527,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
 
             if (sit == 2)
             {
-                int shape[8] = {c + 2, c + 3, c + 2, c + 3, c + 2, c + 3, c + 2, c + 3};
+                int shape[LOC] = {c + 2, c + 3, c + 2, c + 3, c + 2, c + 3, c + 2, c + 3};
                 if (_kbhit())
                 {
                     char ch = _getch();
@@ -590,7 +593,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
     {
         int sit = 1;
         int f = 0;
-        int shape[8] = {c - 2, c - 1, c, c + 1, c, c + 1, c + 2, c + 3};
+        int shape[LOC] = {c - 2, c - 1, c, c + 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t)
         {
             if (sit == 1)
@@ -648,7 +651,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
 
             if (sit == 2)
             {
-                int shape[8] = {c + 2, c + 3, c, c + 1, c + 2, c + 3, c, c + 1};
+                int shape[LOC] = {c + 2, c + 3, c, c + 1, c + 2, c + 3, c, c + 1};
 
                 if (_kbhit())
                 {
