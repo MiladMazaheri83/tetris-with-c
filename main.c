@@ -53,6 +53,7 @@ int main()
                 newshape[i][j] = ' ';
         }
     }
+    scanf("%d");
 }
 
 void print_playground(char playground[20][20], int score[1], char newshape[2][8])
