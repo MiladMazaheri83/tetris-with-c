@@ -105,7 +105,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 0:
     {
         int t = 0;
-        int temp[8] = {4,5,2,3,4,5,6,7};
+        int temp[8] = {4, 5, 2, 3, 4, 5, 6, 7};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -120,7 +120,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 1:
     {
         int t = 0;
-        int temp[8] = {2,3,4,5,2,3,4,5};
+        int temp[8] = {2, 3, 4, 5, 2, 3, 4, 5};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -135,7 +135,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 2:
     {
         int t = 0;
-        int temp[8] = {1,2,3,4,5,6,7,8};
+        int temp[8] = {1, 2, 3, 4, 5, 6, 7, 8};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -146,7 +146,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     case 3:
     {
         int t = 0;
-        int temp[8] = {1,2,3,4,3,4,5,6};
+        int temp[8] = {1, 2, 3, 4, 3, 4, 5, 6};
         for (int i = 0; i < 8; i += 2)
         {
             newshape[t][temp[i]] = '[';
@@ -167,58 +167,241 @@ int shapes(char playground[20][20], int t, int c, int score[1], int *current_sha
     {
     case 0:
     {
+        int sit = 1;
         int shape[8] = {c, c + 1, c - 2, c - 1, c, c + 1, c + 2, c + 3};
         int f = 0;
         for (t; t < 20; t)
         {
-            t--;
-            if (_kbhit())
+            if (sit == 1)
             {
-                char ch = _getch();
-                if (ch == 'a')
+                t--;
+                if (_kbhit())
                 {
-                    if (f > -8)
-                        f -= 2;
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -8)
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6)
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 2;
+                    }
                 }
-                else if (ch == 'd')
+
+                for (int i = 0; i < 8; i += 2)
                 {
-                    if (f < 6)
-                        f += 2;
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 0)
+                    {
+                        t++;
+                    }
                 }
-                else if (ch == 27)
-                    return ch;
+                system("cls");
+                print_playground(playground, score, newshape);
+
+                if (t == 19)
+                    break;
+
+                if (playground[t + 1][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
+                {
+                    break;
+                }
+                for (int i = 0; i < 8; i += 2)
+                {
+
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    if (i == 0)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
             }
 
-            for (int i = 0; i < 8; i += 2)
+            if (sit == 2)
             {
-                playground[t][shape[i] + f] = '[';
-                playground[t][shape[i] + 1 + f] = ']';
-                if (i == 0)
+                t -= 2;
+                int shape[8] = {c, c + 1, c, c + 1, c + 2, c + 3, c, c + 1};
+                if (_kbhit())
                 {
-                    t++;
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -10)
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6)
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 3;
+                    }
                 }
-            }
-            system("cls");
-            print_playground(playground, score, newshape);
 
-            if (t == 19)
-                break;
-
-            if (playground[t + 1][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
-            {
-                break;
-            }
-            for (int i = 0; i < 8; i += 2)
-            {
-
-                playground[t - 1][shape[i] + f] = ' ';
-                playground[t - 1][shape[i] + 1 + f] = ' ';
-                if (i == 0)
+                for (int i = 0; i < 8; i += 2)
                 {
-                    t++;
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 0 || i == 4)
+                    {
+                        t++;
+                    }
                 }
+                system("cls");
+                print_playground(playground, score, newshape);
+
+                if (t == 19)
+                    break;
+
+                if (playground[t + 1][c + f] != ' ' || playground[t][c + 2 + f] != ' ')
+                {
+                    break;
+                }
+                for (int i = 0; i < 8; i += 2)
+                {
+
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    playground[t - 2][shape[i] + f] = ' ';
+                    playground[t - 2][shape[i] + 1 + f] = ' ';
+                    if (i == 0)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
             }
-            usleep(99999999999);
+
+            if (sit == 3)
+            {
+                int shape[8] = {c - 2, c - 1, c, c + 1, c + 2, c + 3, c, c + 1};
+                t--;
+                if (_kbhit())
+                {
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -8)
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6)
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 4;
+                    }
+                }
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 4)
+                    {
+                        t++;
+                    }
+                }
+                system("cls");
+                print_playground(playground, score, newshape);
+
+                if (t == 19)
+                    break;
+
+                if (playground[t][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ' || playground[t][c + 2 + f] != ' ')
+                {
+                    break;
+                }
+                for (int i = 0; i < 8; i += 2)
+                {
+
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    if (i == 4)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
+            }
+
+            if (sit == 4)
+            {
+                int shape[8] = {c, c + 1, c - 2, c - 1, c, c + 1, c, c + 1};
+                t-=2;
+                if (_kbhit())
+                {
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -8)
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 8)
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 1;
+                    }
+                }
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 0 || i == 4)
+                    {
+                        t++;
+                    }
+                }
+                system("cls");
+                print_playground(playground, score, newshape);
+
+                if (t == 19)
+                    break;
+
+                if (playground[t][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ')
+                {
+                    break;
+                }
+                for (int i = 0; i < 8; i += 2)
+                {
+
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    playground[t - 2][shape[i] + f] = ' ';
+                    playground[t - 2][shape[i] + 1 + f] = ' ';
+                    if (i == 0)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
+            }
         }
         return 0;
     }
@@ -281,107 +464,241 @@ int shapes(char playground[20][20], int t, int c, int score[1], int *current_sha
 
     case 2:
     {
+        int sit = 1;
         int f = 0;
         int shape[8] = {c - 4, c - 3, c - 2, c - 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t++)
         {
-            if (_kbhit())
+            if (sit == 1)
             {
-                char ch = _getch();
-                if (ch == 'a')
+                if (_kbhit())
                 {
-                    if (f > -6)
+                    char ch = _getch();
+                    if (ch == 'a')
                     {
-                        f -= 2;
+                        if (f > -6)
+                        {
+                            f -= 2;
+                        }
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6)
+                        {
+                            f += 2;
+                        }
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 2;
                     }
                 }
-                else if (ch == 'd')
+                for (int i = 0; i < 8; i += 2)
                 {
-                    if (f < 6)
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                }
+                system("cls");
+                print_playground(playground, score, newshape);
+                if (t == 19)
+                    break;
+
+                if (playground[t + 1][c - 4 + f] != ' ' || playground[t + 1][c - 2 + f] != ' ' ||
+                    playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
+                {
+                    break;
+                }
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t][shape[i] + f] = ' ';
+                    playground[t][shape[i] + 1 + f] = ' ';
+                }
+                usleep(99999999999);
+            }
+
+            if (sit == 2)
+            {
+                int shape[8] = {c + 2, c + 3, c + 2, c + 3, c + 2, c + 3, c + 2, c + 3};
+                if (_kbhit())
+                {
+                    char ch = _getch();
+                    if (ch == 'a')
                     {
-                        f += 2;
+                        if (f > -12 && playground[t + 3][c + f] == ' ')
+                        {
+                            f -= 2;
+                        }
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6 && playground[t + 3][c + 4 + f] == ' ')
+                        {
+                            f += 2;
+                        }
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 1;
                     }
                 }
-                else if (ch == 27)
-                    return ch;
-            }
-            for (int i = 0; i < 8; i += 2)
-            {
-                playground[t][shape[i] + f] = '[';
-                playground[t][shape[i] + 1 + f] = ']';
-            }
-            system("cls");
-            print_playground(playground, score, newshape);
-            if (t == 19)
-                break;
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 0 || i == 2 || i == 4 || i == 6)
+                    {
+                        t++;
+                    }
+                }
+                system("cls");
+                print_playground(playground, score, newshape);
+                if (t == 20)
+                    break;
 
-            if (playground[t + 1][c - 4 + f] != ' ' || playground[t + 1][c - 2 + f] != ' ' ||
-                playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
-            {
-                break;
-            }
+                if (playground[t][c + 2 + f] != ' ')
+                {
+                    break;
+                }
 
-            for (int i = 0; i < 8; i += 2)
-            {
-                playground[t][shape[i] + f] = ' ';
-                playground[t][shape[i] + 1 + f] = ' ';
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    playground[t - 2][shape[i] + f] = ' ';
+                    playground[t - 2][shape[i] + 1 + f] = ' ';
+                    playground[t - 3][shape[i] + f] = ' ';
+                    playground[t - 3][shape[i] + 1 + f] = ' ';
+                    playground[t - 4][shape[i] + f] = ' ';
+                    playground[t - 4][shape[i] + 1 + f] = ' ';
+                }
+                usleep(99999999999);
+                t -= 4;
             }
-            usleep(99999999999);
         }
         return 0;
     }
 
     case 3:
     {
+        int sit = 1;
         int f = 0;
         int shape[8] = {c - 2, c - 1, c, c + 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t)
         {
-            t--;
-            if (_kbhit())
+            if (sit == 1)
             {
-                char ch = _getch();
-                if (ch == 'a')
+                t--;
+                if (_kbhit())
                 {
-                    if (f > -8)
-                        f -= 2;
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -8)
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6)
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 2;
+                    }
                 }
-                else if (ch == 'd')
+                for (int i = 0; i < 8; i += 2)
                 {
-                    if (f < 6)
-                        f += 2;
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 2)
+                    {
+                        t++;
+                    }
                 }
-                else if (ch == 27)
-                    return ch;
-            }
-            for (int i = 0; i < 8; i += 2)
-            {
-                playground[t][shape[i] + f] = '[';
-                playground[t][shape[i] + 1 + f] = ']';
-                if (i == 2)
+                system("cls");
+                print_playground(playground, score, newshape);
+                if (t == 19)
+                    break;
+                if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ' || playground[t][c - 2 + f] != ' ')
                 {
-                    t++;
+                    break;
                 }
-            }
-            system("cls");
-            print_playground(playground, score, newshape);
-            if (t == 19)
-                break;
-            if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ' || playground[t][c - 2 + f] != ' ')
-            {
-                break;
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    if (i == 2)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
             }
 
-            for (int i = 0; i < 8; i += 2)
+            if (sit == 2)
             {
-                playground[t - 1][shape[i] + f] = ' ';
-                playground[t - 1][shape[i] + 1 + f] = ' ';
-                if (i == 2)
+                int shape[8] = {c + 2, c + 3, c, c + 1, c + 2, c + 3, c, c + 1};
+
+                if (_kbhit())
                 {
-                    t++;
+                    char ch = _getch();
+                    if (ch == 'a')
+                    {
+                        if (f > -10 && playground[t + 2][c - 2 + f] == ' ')
+                            f -= 2;
+                    }
+                    else if (ch == 'd')
+                    {
+                        if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
+                            f += 2;
+                    }
+                    else if (ch == 27)
+                        return ch;
+                    else if (ch == 32)
+                    {
+                        sit = 1;
+                    }
                 }
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t][shape[i] + f] = '[';
+                    playground[t][shape[i] + 1 + f] = ']';
+                    if (i == 0 || i == 4)
+                    {
+                        t++;
+                    }
+                }
+                system("cls");
+                print_playground(playground, score, newshape);
+                if (t == 19)
+                    break;
+                if (playground[t + 1][c + f] != ' ' || playground[t][c + 2 + f] != ' ')
+                {
+                    break;
+                }
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    playground[t - 1][shape[i] + f] = ' ';
+                    playground[t - 1][shape[i] + 1 + f] = ' ';
+                    playground[t - 2][shape[i] + f] = ' ';
+                    playground[t - 2][shape[i] + 1 + f] = ' ';
+                    if (i == 2)
+                    {
+                        t++;
+                    }
+                }
+                usleep(99999999999);
+                t -= 2;
             }
-            usleep(99999999999);
         }
         return 0;
     }
