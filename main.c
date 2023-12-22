@@ -9,6 +9,7 @@
 #define ROW 2
 #define COL 8
 #define LOC 8
+#define SLEEP_TIME 99999999999
 int random1();
 int random2();
 void next_shape(int *nextshape, char newshape[ROW][COL]);
@@ -231,7 +232,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
 
             if (sit == 2)
@@ -290,7 +291,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
 
             if (sit == 3)
@@ -347,7 +348,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
 
             if (sit == 4)
@@ -406,7 +407,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
         }
         return 0;
@@ -463,7 +464,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     t++;
                 }
             }
-            usleep(99999999999);
+            usleep(SLEEP_TIME);
         }
         return 0;
     }
@@ -522,7 +523,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t][shape[i] + f] = ' ';
                     playground[t][shape[i] + 1 + f] = ' ';
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
 
             if (sit == 2)
@@ -582,7 +583,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t - 4][shape[i] + f] = ' ';
                     playground[t - 4][shape[i] + 1 + f] = ' ';
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
                 t -= 4;
             }
         }
@@ -646,7 +647,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
             }
 
             if (sit == 2)
@@ -702,7 +703,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(99999999999);
+                usleep(SLEEP_TIME);
                 t -= 2;
             }
         }
