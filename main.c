@@ -4,17 +4,19 @@
 #include <windows.h>
 #include <time.h>
 #define PI 3.1
+#define WIDTH 20
+#define HEIGHT 20
 int random1();
 int random2();
 void next_shape(int *nextshape, char newshape[2][8]);
-void print_playground(char print_playground[20][20], int score[1], char newshape[2][8]);
-int shapes(char playground[20][20], int t, int c, int score[1], int *current_shape, char newshape[2][8]);
-void clear(char playground[20][20], int score[1]);
-int gameover(char playground[20][20]);
+void print_playground(char print_playground[WIDTH][HEIGHT], int score[1], char newshape[2][8]);
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[2][8]);
+void clear(char playground[WIDTH][HEIGHT], int score[1]);
+int gameover(char playground[WIDTH][HEIGHT]);
 
 int main()
 {
-    char playground[20][20];
+    char playground[WIDTH][HEIGHT];
     char newshape[2][8];
     int i, j;
     int score[2] = {0, 0};
@@ -56,7 +58,7 @@ int main()
     scanf("%d");
 }
 
-void print_playground(char playground[20][20], int score[1], char newshape[2][8])
+void print_playground(char playground[WIDTH][HEIGHT], int score[1], char newshape[2][8])
 {
     int s = score[1];
     int i, j;
@@ -162,7 +164,7 @@ void next_shape(int *nextshape, char newshape[2][8])
     }
 }
 
-int shapes(char playground[20][20], int t, int c, int score[1], int *current_shape, char newshape[2][8])
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[2][8])
 {
     switch (*current_shape)
     {
@@ -706,7 +708,7 @@ int shapes(char playground[20][20], int t, int c, int score[1], int *current_sha
     }
 }
 
-void clear(char playground[20][20], int score[1])
+void clear(char playground[WIDTH][HEIGHT], int score[1])
 {
     for (int t = 0; t < 20; t++)
     {
@@ -733,7 +735,7 @@ void clear(char playground[20][20], int score[1])
     }
 }
 
-int gameover(char playground[20][20])
+int gameover(char playground[WIDTH][HEIGHT])
 {
     if (playground[0][0] != ' ' || playground[0][2] != ' ' ||
         playground[0][4] != ' ' || playground[0][6] != ' ' || playground[0][8] != ' ' || playground[0][10] != ' ' ||
