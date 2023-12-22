@@ -6,22 +6,29 @@
 #define PI 3.1
 #define WIDTH 20
 #define HEIGHT 20
-#define ROW 2
-#define COL 8
 #define LOC 8
 #define SLEEP_TIME 99999999999
+#define RED "\e[0;31m"
+#define GRN "\e[0;32m"
+#define YEL "\e[0;33m"
+#define BLU "\e[0;34m"
+#define MAG "\e[0;35m"
+#define CYN "\e[0;36m"
+#define WHT "\e[0;37m"
+#define REDHB "\e[0;101m"
+#define GRNHB "\e[0;102m"
+#define YELHB "\e[0;103m"
+#define WHTHB "\e[0;107m"
 int random1();
 int random2();
-void next_shape(int *nextshape, char newshape[ROW][COL]);
-void print_playground(char print_playground[WIDTH][HEIGHT], int score[1], char newshape[ROW][COL]);
-int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[ROW][COL]);
+void print_playground(char playground[WIDTH][HEIGHT], int score[1],int nextshape);
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape,int *nextshape);
 void clear(char playground[WIDTH][HEIGHT], int score[1]);
 int gameover(char playground[WIDTH][HEIGHT]);
 
 int main()
 {
     char playground[WIDTH][HEIGHT];
-    char newshape[ROW][COL];
     int i, j;
     int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
@@ -29,68 +36,82 @@ int main()
         for (j = 0; j < 20; j++)
             playground[i][j] = ' ';
     }
-
-    for (i = 0; i < 2; i++)
+    printf(WHT "\n\n\n\t\t\tHello there :)");
+    sleep(2);
+    printf(WHT "\n\n\t\t\tWellcom to the " YEL "Tetris" RED " game.\n\n\n");
+    sleep(2);
+    printf(CYN "\t\t|" YEL "*" CYN "|" WHT "You are in the ancient world! the           " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "persian army needs food in war, there       " CYN "|" YEL "*" CYN "|\n");
+    printf("\t\t|" YEL "*" CYN "|" WHT "is food for 1 soldier inside each block,    " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "when you fill a row with blocks, you        " CYN "|" YEL "*" CYN "|\n");
+    printf("\t\t|" YEL "*" CYN "|" WHT "deliver food to 10 soldiers, the army       " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "needs your help, you determine the result of" CYN "|" YEL "*" CYN "|\n");
+    printf("\t\t|" YEL "*" CYN "|" WHT "the battle!***                              " CYN "|" YEL "*" CYN "|");
+    sleep(10);
+    printf(WHT "\n\n\n ARE YOU ACCEPT THIS MISSION?\n1." GRN "yes\n" WHT "2." RED "no");
+    int choose = getch();
+    if (choose == 49)
     {
-        for (j = 0; j < 8; j++)
-            newshape[i][j] = ' ';
-    }
 
-    int current_shape = random1();
-    while (1)
-    {
-        int nextshape = random2();
-        next_shape(&nextshape, newshape);
-        int s = shapes(playground, 0, 10, score, &current_shape, newshape);
-        clear(playground, score);
-        if (gameover(playground))
+        int current_shape = random1();
+        while (1)
         {
-            printf("\nGAME OVER!!");
-            break;
+            int nextshape = random2();
+            int s = shapes(playground, 0, 10, score, &current_shape, &nextshape);
+            clear(playground, score);
+            if (gameover(playground))
+            {
+                printf("\nGAME OVER!!\n");
+                break;
+            }
+            if (s == 27)
+            {
+                break;
+            }
+            current_shape = nextshape;
         }
-        if (s == 27)
-        {
-            break;
-        }
-        current_shape = nextshape;
-        for (i = 0; i < 2; i++)
-        {
-            for (j = 0; j < 8; j++)
-                newshape[i][j] = ' ';
-        }
+        printf(RED "WEll Done! YOUR SCORE IS:" YEL "%d" WHT " press any key to exit. By By :)", score[1]);
+        getch();
     }
-    scanf("%d");
+    if (choose == 50)
+    {
+        printf(RED "\n\nThe persian army is defeated!!\n\nsee you later");
+        getch();
+    }
 }
 
-void print_playground(char playground[WIDTH][HEIGHT], int score[1], char newshape[ROW][COL])
+void print_playground(char playground[WIDTH][HEIGHT], int score[1],int nextshape)
 {
     int s = score[1];
     int i, j;
-    for (i = 0; i < 2; i++)
-    {
-        printf("\t\t");
-        for (j = 0; j < 8; j++)
-        {
-            printf("%c", newshape[i][j]);
-        }
-        printf("\n");
-    }
-
     printf("\n");
-    printf("\t\t||||||||||||||||||||||||||\tnext shape:\n");
-    printf("\t\t--------------------------\n");
+    printf(REDHB "\t\t||||||" YELHB "||" REDHB "|" YELHB "||||||||" REDHB "|" YELHB "||" REDHB "||||||\n");
+    printf(RED "\t\t----" YEL "----" RED "----" YEL "----" RED "-----" YEL "-----\n");
     for (i = 0; i < 20; i++)
     {
-        printf("\t\t|*|");
+        printf(CYN "\t\t|" YEL "*" CYN "|");
         for (j = 0; j < 20; j++)
         {
-            printf("%c", playground[i][j]);
+            printf(WHT "%c", playground[i][j]);
         }
-        printf("|*|\n");
+        printf(CYN "|" YEL "*" CYN "|\n");
     }
-    printf("\t\t--------------------------\n");
-    printf("\t\t++++++++++++++++++++++++++\n");
-    printf("\n\t\tscore: %d  press Esc to exit :)\n\n press button:\n", s);
+    printf(MAG "\t\t----" YEL "----" MAG "----" YEL "----" MAG "-----" YEL "-----\n");
+    printf(YEL "\t\t++++++++++++++++++++++++++\n");
+    printf(WHT "\n\t\tscore: %d  press Esc to exit :)\t\t next shape:\t", s);
+
+    switch (nextshape)
+    {
+    case 0:
+        printf(YEL"  []  \n\t\t\t\t\t\t\t\t\t[][][]\n\n");
+        break;
+    case 1:
+        printf(BLU"[][]\n\t\t\t\t\t\t\t\t\t[][]\n\n");
+        break;
+    case 2:
+      printf(GRN"[][][][]\n\n");
+        break;
+    case 3:
+    printf(RED"[][]\n\t\t\t\t\t\t\t\t\t  [][]\n\n");
+        break;
+    }
 }
 
 int random1()
@@ -105,71 +126,9 @@ int random2()
     return rand() % 4;
 }
 
-void next_shape(int *nextshape, char newshape[ROW][COL])
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, int *nextshape)
 {
-    switch (*nextshape)
-    {
-    case 0:
-    {
-        int t = 0;
-        int temp[LOC] = {4, 5, 2, 3, 4, 5, 6, 7};
-        for (int i = 0; i < 8; i += 2)
-        {
-            newshape[t][temp[i]] = '[';
-            newshape[t][temp[i] + 1] = ']';
-            if (i == 0)
-            {
-                t++;
-            }
-        }
-        break;
-    }
-    case 1:
-    {
-        int t = 0;
-        int temp[LOC] = {2, 3, 4, 5, 2, 3, 4, 5};
-        for (int i = 0; i < 8; i += 2)
-        {
-            newshape[t][temp[i]] = '[';
-            newshape[t][temp[i] + 1] = ']';
-            if (i == 2)
-            {
-                t++;
-            }
-        }
-        break;
-    }
-    case 2:
-    {
-        int t = 0;
-        int temp[LOC] = {1, 2, 3, 4, 5, 6, 7, 8};
-        for (int i = 0; i < 8; i += 2)
-        {
-            newshape[t][temp[i]] = '[';
-            newshape[t][temp[i] + 1] = ']';
-        }
-        break;
-    }
-    case 3:
-    {
-        int t = 0;
-        int temp[LOC] = {1, 2, 3, 4, 3, 4, 5, 6};
-        for (int i = 0; i < 8; i += 2)
-        {
-            newshape[t][temp[i]] = '[';
-            newshape[t][temp[i] + 1] = ']';
-            if (i == 2)
-            {
-                t++;
-            }
-        }
-        break;
-    }
-    }
-}
-
-int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, char newshape[ROW][COL])
-{
+    int v = 0;
     switch (*current_shape)
     {
     case 0:
@@ -185,12 +144,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -8)
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6)
                             f += 2;
@@ -200,6 +159,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 2;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
 
@@ -213,7 +194,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
 
                 if (t == 19)
                     break;
@@ -232,7 +213,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -242,12 +223,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -10)
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6)
                             f += 2;
@@ -257,6 +238,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 3;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
 
@@ -270,7 +273,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
 
                 if (t == 19)
                     break;
@@ -291,7 +294,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
 
             if (sit == 3)
@@ -301,12 +304,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -8)
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6)
                             f += 2;
@@ -316,6 +319,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 4;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
 
@@ -329,7 +354,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
 
                 if (t == 19)
                     break;
@@ -348,22 +373,22 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
 
             if (sit == 4)
             {
                 int shape[LOC] = {c, c + 1, c - 2, c - 1, c, c + 1, c, c + 1};
-                t-=2;
+                t -= 2;
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -8)
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 8)
                             f += 2;
@@ -373,6 +398,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 1;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
 
@@ -386,7 +433,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
 
                 if (t == 19)
                     break;
@@ -407,7 +454,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
         }
         return 0;
@@ -422,18 +469,40 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
             if (_kbhit())
             {
                 char ch = _getch();
-                if (ch == 'a')
+                if (ch == 'a' || ch == 'A')
                 {
                     if (f > -10)
                         f -= 2;
                 }
-                else if (ch == 'd')
+                else if (ch == 'd' || ch == 'D')
                 {
                     if (f < 6)
                         f += 2;
                 }
                 else if (ch == 27)
                     return ch;
+                else if (ch == 's' || ch == 'S')
+                {
+                    if (v == 0 || v == -99999099999)
+                    {
+                        v = -99999899999;
+                    }
+                    else
+                    {
+                        v = 0;
+                    }
+                }
+                else if (ch == 'w' || ch == 'W')
+                {
+                    if (v == 0 || v == -99999899999)
+                    {
+                        v = -99999099999;
+                    }
+                    else
+                    {
+                        v = 0;
+                    }
+                }
             }
 
             for (int i = 0; i < 8; i += 2)
@@ -446,7 +515,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 }
             }
             system("cls");
-            print_playground(playground, score, newshape);
+            print_playground(playground, score, *nextshape);
             if (t == 19)
                 break;
 
@@ -464,7 +533,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     t++;
                 }
             }
-            usleep(SLEEP_TIME);
+            usleep(SLEEP_TIME + v);
         }
         return 0;
     }
@@ -481,14 +550,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -6)
                         {
                             f -= 2;
                         }
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6)
                         {
@@ -501,6 +570,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     {
                         sit = 2;
                     }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
                 }
                 for (int i = 0; i < 8; i += 2)
                 {
@@ -508,7 +599,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t][shape[i] + 1 + f] = ']';
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
                 if (t == 19)
                     break;
 
@@ -523,7 +614,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t][shape[i] + f] = ' ';
                     playground[t][shape[i] + 1 + f] = ' ';
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -532,14 +623,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -12 && playground[t + 3][c + f] == ' ')
                         {
                             f -= 2;
                         }
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6 && playground[t + 3][c + 4 + f] == ' ')
                         {
@@ -552,6 +643,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     {
                         sit = 1;
                     }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
                 }
                 for (int i = 0; i < 8; i += 2)
                 {
@@ -563,7 +676,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
                 if (t == 20)
                     break;
 
@@ -583,7 +696,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t - 4][shape[i] + f] = ' ';
                     playground[t - 4][shape[i] + 1 + f] = ' ';
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
                 t -= 4;
             }
         }
@@ -603,12 +716,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -8)
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6)
                             f += 2;
@@ -618,6 +731,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 2;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -630,7 +765,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
                 if (t == 19)
                     break;
                 if (playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ' || playground[t][c - 2 + f] != ' ')
@@ -647,7 +782,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -657,12 +792,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 if (_kbhit())
                 {
                     char ch = _getch();
-                    if (ch == 'a')
+                    if (ch == 'a' || ch == 'A')
                     {
                         if (f > -10 && playground[t + 2][c - 2 + f] == ' ')
                             f -= 2;
                     }
-                    else if (ch == 'd')
+                    else if (ch == 'd' || ch == 'D')
                     {
                         if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
                             f += 2;
@@ -672,6 +807,28 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     else if (ch == 32)
                     {
                         sit = 1;
+                    }
+                    else if (ch == 's' || ch == 'S')
+                    {
+                        if (v == 0 || v == -99999099999)
+                        {
+                            v = -99999899999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
+                    }
+                    else if (ch == 'w' || ch == 'W')
+                    {
+                        if (v == 0 || v == -99999899999)
+                        {
+                            v = -99999099999;
+                        }
+                        else
+                        {
+                            v = 0;
+                        }
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -684,7 +841,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                 }
                 system("cls");
-                print_playground(playground, score, newshape);
+                print_playground(playground, score, *nextshape);
                 if (t == 19)
                     break;
                 if (playground[t + 1][c + f] != ' ' || playground[t][c + 2 + f] != ' ')
@@ -703,7 +860,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME);
+                usleep(SLEEP_TIME + v);
                 t -= 2;
             }
         }
