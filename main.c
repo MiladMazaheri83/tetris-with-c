@@ -26,12 +26,11 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
 void clear(char playground[WIDTH][HEIGHT], int score[1]);
 int gameover(char playground[WIDTH][HEIGHT]);
 
-
 int main()
 {
     char playground[WIDTH][HEIGHT];
     int i, j;
-    
+
     // Initialize playground with spaces//
     int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
@@ -41,7 +40,7 @@ int main()
     }
     /////////////////////////////////////////////////////////////////// GAME MENU ///////////////////////////////////////////////////////////////////////////////////////////
     // Display welcome messages//
-   
+
     printf(WHT "\n\n\n\t\t\tHello there :)");
     Sleep(2000);
     printf(WHT "\n\n\t\t\tWellcom to the " YEL "Tetris" RED " game.\n\n\n");
@@ -101,22 +100,36 @@ void print_playground(char playground[WIDTH][HEIGHT], int score[1], int nextshap
 {
     int s = score[1];
     int i, j;
+
+    // Print the top border of the playground //
     printf("\n");
     printf(REDHB "\t\t||||||" YELHB "||" REDHB "|" YELHB "||||||||" REDHB "|" YELHB "||" REDHB "||||||\n");
     printf(RED "\t\t----" YEL "----" RED "----" YEL "----" RED "-----" YEL "-----\n");
+
+    // Print the playground rows //
     for (i = 0; i < 20; i++)
     {
+
+        // Print the left border of each row //
         printf(CYN "\t\t|" YEL "*" CYN "|");
         for (j = 0; j < 20; j++)
         {
+            // print playground //
             printf(WHT "%c", playground[i][j]);
         }
+
+        // Print the right border of each row //
         printf(CYN "|" YEL "*" CYN "|\n");
     }
+
+    // Print the bottom border of the playground //
     printf(MAG "\t\t----" YEL "----" MAG "----" YEL "----" MAG "-----" YEL "-----\n");
     printf(YEL "\t\t++++++++++++++++++++++++++\n");
+
+    // Print the score and information about the next shape //
     printf(WHT "\n\t\tscore: %d  press Esc to exit :)\t\t next shape:\t", s);
 
+    // Print the representation of the next shape based on its type //
     switch (nextshape)
     {
     case 0:
@@ -135,7 +148,7 @@ void print_playground(char playground[WIDTH][HEIGHT], int score[1], int nextshap
 
     printf(YEL "\t\tPRESS button\n");
 }
-
+// Function to generate a random integer within a specified range (0, 1, 2, 3)//
 int random1()
 {
     srand(clock() + time(NULL) + PI);
@@ -147,7 +160,8 @@ int random2()
     srand(clock() + time(NULL) + PI);
     return rand() % 4;
 }
-
+// This function is designed to draw different shapes. this function do:
+// (move left, move right, move down, stop, quit the game, generate shapes, rotate shapes, speed up and down, and update playground)
 int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, int *nextshape)
 {
     int v = 0;
@@ -162,6 +176,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         int f = 0;
         for (t; t < 20; t)
         {
+            //   []
+            // [][][]
+            // number of sit show that what shape status in rotate position //
             if (sit == 1)
             {
                 // Handling user input for movement and rotation //
@@ -179,13 +196,13 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
                             f += 2;
                     }
-                    else if (ch == 27)
+                    else if (ch == 27) // Escape key for exiting the game //
                         return ch;
-                    else if (ch == 32)
+                    else if (ch == 32) // Space key for changing sit to 2 //
                     {
                         sit = 2;
                     }
-                    else if (ch == 's' || ch == 'S')
+                    else if (ch == 's' || ch == 'S') // s key for speed up the game //
                     {
                         if (v == 0 || v == 380)
                         {
@@ -196,7 +213,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                             v = 0;
                         }
                     }
-                    else if (ch == 'w' || ch == 'W')
+                    else if (ch == 'w' || ch == 'W') // w key for speed down the game //
                     {
                         if (v == 0 || v == -280)
                         {
@@ -207,12 +224,13 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                             v = 0;
                         }
                     }
-                    else if (ch == 13)
+                    else if (ch == 13) // Enter key for stop //
                     {
                         getch();
                     }
                 }
 
+                // Drawing the shape on the playground //
                 for (int i = 0; i < 8; i += 2)
                 {
                     playground[t][shape[i] + f] = '[';
@@ -225,13 +243,16 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 system("cls");
                 print_playground(playground, score, *nextshape);
 
+                // Break if reaching the bottom //
                 if (t == 19)
                     break;
 
+                // Break if there's an obstacle below the shape //
                 if (playground[t + 1][c - 2 + f] != ' ' || playground[t + 1][c + f] != ' ' || playground[t + 1][c + 2 + f] != ' ')
                 {
                     break;
                 }
+                // Clear the previous position of the shape //
                 for (int i = 0; i < 8; i += 2)
                 {
 
@@ -242,8 +263,13 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
+                // Delay for animation //
                 Sleep(SLEEP_TIME + v);
             }
+
+            // []
+            // [][]
+            // []
 
             if (sit == 2)
             {
@@ -330,7 +356,8 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 }
                 Sleep(SLEEP_TIME + v);
             }
-
+            // [][][]
+            //   []
             if (sit == 3)
             {
                 int shape[LOC] = {c - 2, c - 1, c, c + 1, c + 2, c + 3, c, c + 1};
@@ -414,6 +441,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 Sleep(SLEEP_TIME + v);
             }
 
+            //  []
+            //[][]
+            //  []
             if (sit == 4)
             {
                 int shape[LOC] = {c, c + 1, c - 2, c - 1, c, c + 1, c, c + 1};
@@ -502,6 +532,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         }
         return 0;
     }
+
+    //[][]
+    //[][]
     case 1:
     {
         int f = 0;
@@ -585,6 +618,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         return 0;
     }
 
+    // [][][][]
     case 2:
     {
         int sit = 1;
@@ -592,6 +626,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         int shape[LOC] = {c - 4, c - 3, c - 2, c - 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t++)
         {
+            // [][][][]
             if (sit == 1)
             {
                 if (_kbhit())
@@ -669,6 +704,10 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 Sleep(SLEEP_TIME + v);
             }
 
+            //[]
+            //[]
+            //[]
+            //[]
             if (sit == 2)
             {
                 int shape[LOC] = {c + 2, c + 3, c + 2, c + 3, c + 2, c + 3, c + 2, c + 3};
@@ -760,6 +799,8 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         return 0;
     }
 
+    //[][]
+    //  [][]
     case 3:
     {
         int sit = 1;
@@ -767,6 +808,8 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         int shape[LOC] = {c - 2, c - 1, c, c + 1, c, c + 1, c + 2, c + 3};
         for (t; t < 20; t)
         {
+            //[][]
+            //  [][]
             if (sit == 1)
             {
                 t--;
@@ -846,7 +889,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 }
                 Sleep(SLEEP_TIME + v);
             }
-
+            //[]
+            //[][]
+            //  []
             if (sit == 2)
             {
                 int shape[LOC] = {c + 2, c + 3, c, c + 1, c + 2, c + 3, c, c + 1};
@@ -936,8 +981,10 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
     }
 }
 
+// Function to clear a line and shift down the above lines //
 void clear(char playground[WIDTH][HEIGHT], int score[1])
 {
+    // Loop through each column in the specified line
     for (int t = 0; t < 20; t++)
     {
         int count = 0;
@@ -949,7 +996,9 @@ void clear(char playground[WIDTH][HEIGHT], int score[1])
         int h = t;
         if (count == 10)
         {
+            // increase score//
             score[1] += 10;
+            // Shift down each element above the specified line
             for (t; t > 0; t--)
             {
                 for (int c = 0; c < 20; c++)
@@ -962,7 +1011,7 @@ void clear(char playground[WIDTH][HEIGHT], int score[1])
         }
     }
 }
-
+// this function check the line 1, if there is any blocks, it breaks the main loop and say game over!//
 int gameover(char playground[WIDTH][HEIGHT])
 {
     if (playground[0][0] != ' ' || playground[0][2] != ' ' ||
