@@ -7,7 +7,7 @@
 #define WIDTH 20
 #define HEIGHT 20
 #define LOC 8
-#define SLEEP_TIME 99999999999
+#define SLEEP_TIME 380
 #define RED "\e[0;31m"
 #define GRN "\e[0;32m"
 #define YEL "\e[0;33m"
@@ -21,52 +21,71 @@
 #define WHTHB "\e[0;107m"
 int random1();
 int random2();
-void print_playground(char playground[WIDTH][HEIGHT], int score[1],int nextshape);
-int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape,int *nextshape);
+void print_playground(char playground[WIDTH][HEIGHT], int score[1], int nextshape);
+int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *current_shape, int *nextshape);
 void clear(char playground[WIDTH][HEIGHT], int score[1]);
 int gameover(char playground[WIDTH][HEIGHT]);
+
 
 int main()
 {
     char playground[WIDTH][HEIGHT];
     int i, j;
+    
+    // Initialize playground with spaces//
     int score[2] = {0, 0};
     for (i = 0; i < 20; i++)
     {
         for (j = 0; j < 20; j++)
             playground[i][j] = ' ';
     }
+    /////////////////////////////////////////////////////////////////// GAME MENU ///////////////////////////////////////////////////////////////////////////////////////////
+    // Display welcome messages//
+   
     printf(WHT "\n\n\n\t\t\tHello there :)");
-    sleep(2);
+    Sleep(2000);
     printf(WHT "\n\n\t\t\tWellcom to the " YEL "Tetris" RED " game.\n\n\n");
-    sleep(2);
+    Sleep(2500);
     printf(CYN "\t\t|" YEL "*" CYN "|" WHT "You are in the ancient world! the           " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "persian army needs food in war, there       " CYN "|" YEL "*" CYN "|\n");
     printf("\t\t|" YEL "*" CYN "|" WHT "is food for 1 soldier inside each block,    " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "when you fill a row with blocks, you        " CYN "|" YEL "*" CYN "|\n");
     printf("\t\t|" YEL "*" CYN "|" WHT "deliver food to 10 soldiers, the army       " CYN "|" YEL "*" CYN "|\n\t\t|" YEL "*" CYN "|" WHT "needs your help, you determine the result of" CYN "|" YEL "*" CYN "|\n");
     printf("\t\t|" YEL "*" CYN "|" WHT "the battle!***                              " CYN "|" YEL "*" CYN "|");
-    sleep(10);
-    printf(WHT "\n\n\n ARE YOU ACCEPT THIS MISSION?\n1." GRN "yes\n" WHT "2." RED "no");
+    Sleep(13000);
+
+    // Display mission acceptance prompt//
+    printf(WHT "\n\n\n ARE YOU ACCEPT THIS MISSION?\n1." GRN "yes\n" WHT "2." RED "no" WHT "\nif you enter wrong key, you betray persian army!!!");
     int choose = getch();
+
+    // Process user's choice
     if (choose == 49)
     {
 
         int current_shape = random1();
+
+        // game loop //
         while (1)
         {
             int nextshape = random2();
             int s = shapes(playground, 0, 10, score, &current_shape, &nextshape);
             clear(playground, score);
+
+            // Check for game over//
             if (gameover(playground))
             {
-                printf("\nGAME OVER!!\n");
+                printf("\nGAME OVER!!\n\t\t");
                 break;
             }
+
+            // Exit if the user presses Esc//
             if (s == 27)
             {
                 break;
             }
             current_shape = nextshape;
+            fflush(stdin);
         }
+
+        // Displaying the final score //
         printf(RED "WEll Done! YOUR SCORE IS:" YEL "%d" WHT " press any key to exit. By By :)", score[1]);
         getch();
     }
@@ -77,7 +96,8 @@ int main()
     }
 }
 
-void print_playground(char playground[WIDTH][HEIGHT], int score[1],int nextshape)
+/////////////////////////////////////////////////////////////// Function to print the game playground ////////////////////////////////////////////////////////////////////
+void print_playground(char playground[WIDTH][HEIGHT], int score[1], int nextshape)
 {
     int s = score[1];
     int i, j;
@@ -100,18 +120,20 @@ void print_playground(char playground[WIDTH][HEIGHT], int score[1],int nextshape
     switch (nextshape)
     {
     case 0:
-        printf(YEL"  []  \n\t\t\t\t\t\t\t\t\t[][][]\n\n");
+        printf(YEL "  []  \n\t\t\t\t\t\t\t\t\t[][][]\n\n");
         break;
     case 1:
-        printf(BLU"[][]\n\t\t\t\t\t\t\t\t\t[][]\n\n");
+        printf(BLU "[][]\n\t\t\t\t\t\t\t\t\t[][]\n\n");
         break;
     case 2:
-      printf(GRN"[][][][]\n\n");
+        printf(GRN "[][][][]\n\n");
         break;
     case 3:
-    printf(RED"[][]\n\t\t\t\t\t\t\t\t\t  [][]\n\n");
+        printf(RED "[][]\n\t\t\t\t\t\t\t\t\t  [][]\n\n");
         break;
     }
+
+    printf(YEL "\t\tPRESS button\n");
 }
 
 int random1()
@@ -131,6 +153,8 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
     int v = 0;
     switch (*current_shape)
     {
+    //   []
+    // [][][]
     case 0:
     {
         int sit = 1;
@@ -140,18 +164,19 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
         {
             if (sit == 1)
             {
+                // Handling user input for movement and rotation //
                 t--;
                 if (_kbhit())
                 {
                     char ch = _getch();
                     if (ch == 'a' || ch == 'A')
                     {
-                        if (f > -8)
+                        if (f > -8 && playground[t + 1][c - 4 + f] == ' ')
                             f -= 2;
                     }
                     else if (ch == 'd' || ch == 'D')
                     {
-                        if (f < 6)
+                        if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
                             f += 2;
                     }
                     else if (ch == 27)
@@ -162,9 +187,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -173,14 +198,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
 
@@ -213,7 +242,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -225,25 +254,26 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     char ch = _getch();
                     if (ch == 'a' || ch == 'A')
                     {
-                        if (f > -10)
+                        if (f > -10 && playground[t + 2][c - 2 + f] == ' ')
                             f -= 2;
                     }
                     else if (ch == 'd' || ch == 'D')
                     {
-                        if (f < 6)
+                        if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
                             f += 2;
                     }
                     else if (ch == 27)
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 3;
+                        if (f > -10)
+                            sit = 3;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -252,14 +282,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
 
@@ -294,7 +328,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
 
             if (sit == 3)
@@ -306,12 +340,12 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     char ch = _getch();
                     if (ch == 'a' || ch == 'A')
                     {
-                        if (f > -8)
+                        if (f > -8 && playground[t][c - 4 + f] == ' ' && playground[t + 2][c - 2 + f] == ' ')
                             f -= 2;
                     }
                     else if (ch == 'd' || ch == 'D')
                     {
-                        if (f < 6)
+                        if (f < 6 && playground[t + 1][c + 4 + f] == ' ' && playground[t + 2][c + 2 + f] == ' ')
                             f += 2;
                     }
                     else if (ch == 27)
@@ -322,9 +356,9 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -333,14 +367,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
 
@@ -373,7 +411,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
 
             if (sit == 4)
@@ -385,25 +423,26 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     char ch = _getch();
                     if (ch == 'a' || ch == 'A')
                     {
-                        if (f > -8)
+                        if (f > -8 && playground[t + 1][c - 4 + f] == ' ')
                             f -= 2;
                     }
                     else if (ch == 'd' || ch == 'D')
                     {
-                        if (f < 8)
+                        if (f < 8 && playground[t + 2][c + 2 + f] == ' ')
                             f += 2;
                     }
                     else if (ch == 27)
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 1;
+                        if (f < 8)
+                            sit = 1;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -412,14 +451,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
 
@@ -454,7 +497,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
         }
         return 0;
@@ -471,21 +514,21 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 char ch = _getch();
                 if (ch == 'a' || ch == 'A')
                 {
-                    if (f > -10)
+                    if (f > -10 && playground[t + 1][c - 2 + f] == ' ')
                         f -= 2;
                 }
                 else if (ch == 'd' || ch == 'D')
                 {
-                    if (f < 6)
+                    if (f < 6 && playground[t + 1][c + 4 + f] == ' ')
                         f += 2;
                 }
                 else if (ch == 27)
                     return ch;
                 else if (ch == 's' || ch == 'S')
                 {
-                    if (v == 0 || v == -99999099999)
+                    if (v == 0 || v == 380)
                     {
-                        v = -99999899999;
+                        v = -280;
                     }
                     else
                     {
@@ -494,14 +537,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                 }
                 else if (ch == 'w' || ch == 'W')
                 {
-                    if (v == 0 || v == -99999899999)
+                    if (v == 0 || v == -280)
                     {
-                        v = -99999099999;
+                        v = 380;
                     }
                     else
                     {
                         v = 0;
                     }
+                }
+                else if (ch == 13)
+                {
+                    getch();
                 }
             }
 
@@ -533,7 +580,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     t++;
                 }
             }
-            usleep(SLEEP_TIME + v);
+            Sleep(SLEEP_TIME + v);
         }
         return 0;
     }
@@ -552,14 +599,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     char ch = _getch();
                     if (ch == 'a' || ch == 'A')
                     {
-                        if (f > -6)
+                        if (f > -6 && (playground[t + 1][c - 6 + f] == ' '))
                         {
                             f -= 2;
                         }
                     }
                     else if (ch == 'd' || ch == 'D')
                     {
-                        if (f < 6)
+                        if (f < 6 && (playground[t + 1][c + 4 + f] == ' '))
                         {
                             f += 2;
                         }
@@ -568,13 +615,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 2;
+                        if (t < 17 && (playground[t + 3][c + 2 + f] == ' '))
+                            sit = 2;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -583,14 +631,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -614,7 +666,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t][shape[i] + f] = ' ';
                     playground[t][shape[i] + 1 + f] = ' ';
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -641,13 +693,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 1;
+                        if (f > -8)
+                            sit = 1;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -656,14 +709,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -696,7 +753,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     playground[t - 4][shape[i] + f] = ' ';
                     playground[t - 4][shape[i] + 1 + f] = ' ';
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
                 t -= 4;
             }
         }
@@ -730,13 +787,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 2;
+                        if (t < 19 && playground[t + 3][c + f] == ' ')
+                            sit = 2;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -745,14 +803,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -782,7 +844,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
             }
 
             if (sit == 2)
@@ -806,13 +868,14 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         return ch;
                     else if (ch == 32)
                     {
-                        sit = 1;
+                        if (f > -10 && playground[t][c - 4 + f] == ' ')
+                            sit = 1;
                     }
                     else if (ch == 's' || ch == 'S')
                     {
-                        if (v == 0 || v == -99999099999)
+                        if (v == 0 || v == 380)
                         {
-                            v = -99999899999;
+                            v = -280;
                         }
                         else
                         {
@@ -821,14 +884,18 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                     }
                     else if (ch == 'w' || ch == 'W')
                     {
-                        if (v == 0 || v == -99999899999)
+                        if (v == 0 || v == -280)
                         {
-                            v = -99999099999;
+                            v = 380;
                         }
                         else
                         {
                             v = 0;
                         }
+                    }
+                    else if (ch == 13)
+                    {
+                        getch();
                     }
                 }
                 for (int i = 0; i < 8; i += 2)
@@ -860,7 +927,7 @@ int shapes(char playground[WIDTH][HEIGHT], int t, int c, int score[1], int *curr
                         t++;
                     }
                 }
-                usleep(SLEEP_TIME + v);
+                Sleep(SLEEP_TIME + v);
                 t -= 2;
             }
         }
