@@ -1014,11 +1014,12 @@ void clear(char playground[WIDTH][HEIGHT], int score[1])
 // this function check the line 1, if there is any blocks, it breaks the main loop and say game over!//
 int gameover(char playground[WIDTH][HEIGHT])
 {
-    if (playground[0][0] != ' ' || playground[0][2] != ' ' ||
-        playground[0][4] != ' ' || playground[0][6] != ' ' || playground[0][8] != ' ' || playground[0][10] != ' ' ||
-        playground[0][12] != ' ' || playground[0][14] != ' ' || playground[0][16] != ' ' || playground[0][18] != ' ')
+    for (int i = 0; i <= 18; i += 2)
     {
-        return 1;
+        if (playground[0][i] != ' ')
+        {
+            return 1;
+        }
     }
     return 0;
 }
