@@ -1,30 +1,5 @@
-![Logo](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/logo.jpg)
+<h1>Terminal based Tetris game with C.</h1>
 
-
-# Comprehensive-education-system
-
-Writing an educative system with c++
-
-
-## Screenshots
-
-![login page](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/login_page.png?raw=true)
-
-![home page](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/home_page.png?raw=true)
-
-![requests](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/requests.png?raw=true)
-
-![course offer](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/course_offeering_page.png?raw=true)
-
-![user courses](https://github.com/MiladMazaheri83/Comprehensive-education-system/blob/main/readme/my_courses_page.png?raw=true)
-
-## Installation
-
-run server with (on 8080)
-
-```bash
-  make && ./server.out ./files/majors.csv ./files/students.csv ./files/courses.csv ./files/professors.csv
-```
-
-
+<p>Coded By MohammadHosein Mazaheri</p>
+>>>>>>> a5fb6a4f44b043355bc6ddf1da14910f0eb804ab
 <p>ft. with <a href="https://github.com/MohNamdar">MohNamdar</a></p>
