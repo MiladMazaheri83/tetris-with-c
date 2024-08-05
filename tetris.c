@@ -866,7 +866,7 @@ void run(char playground[WIDTH][HEIGHT], int score[2])
             // Check for game over//
             if (gameover(playground))
             {
-                printf("\nGAME OVER!!\n\t\t");
+                printf("\n\t\tGAME OVER!!\n\t\t");
                 break;
             }
 
@@ -875,13 +875,13 @@ void run(char playground[WIDTH][HEIGHT], int score[2])
         }
 
         // Displaying the final score //
-        printf(RED "WEll Done! YOUR SCORE IS:" YEL "%d" WHT "\npress any key to exit. By By :)", score[1]);
+        printf(RED "WEll Done! YOUR SCORE IS:" YEL " %d" WHT "\n\t\tpress any key to exit. By By :)", score[1]);
         getch();
     }
     break;
     case '2':
     {
-        printf(RED "\n\nThe persian army is defeated!!\n\nsee you later");
+        printf(RED "\n\n\tThe persian army is defeated!!\n\n\tsee you later");
         getch();
     }
     break;
